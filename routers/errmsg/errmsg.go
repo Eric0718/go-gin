@@ -9,5 +9,5 @@ const (
 var MsgFlags = map[int]string{
 	SUCCESS:        "ok",
 	ERROR:          "fail",
-	INVALID_PARAMS: "请求参数错误",
+	INVALID_PARAMS: "Request parameter error",
 }

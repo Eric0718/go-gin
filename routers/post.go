@@ -28,12 +28,6 @@ func apiPost(c *gin.Context) {
 		return
 	}
 
-	if idToFunc[id] != method {
-		logger.Errorf("request method[%v] not registed!", method)
-		resG.Response(http.StatusBadRequest, errmsg.INVALID_PARAMS, nil)
-		return
-	}
-
 	var param string
 	if param = c.Query("param"); param == "" {
 		logger.Errorf("request param [%v] empty!", param)
@@ -41,15 +35,21 @@ func apiPost(c *gin.Context) {
 		return
 	}
 
-	if handler, ok := handlers[id]; ok {
-		err, _ := handler(param)
+	if f, ok := handlers[id]; ok {
+		if idToFunc[id] != method {
+			logger.Errorf("request method[%v] not registed!", method)
+			resG.Response(http.StatusBadRequest, errmsg.INVALID_PARAMS, nil)
+			return
+		}
+		err, _ := f(param)
 		if err != nil {
 			logger.Error(err)
 			resG.Response(http.StatusBadRequest, errmsg.INVALID_PARAMS, nil)
 			return
 		}
+
 	} else {
-		logger.Errorf("request method id[%v] not exist!", id)
+		logger.Errorf("request id[%v] not exist!", id)
 		resG.Response(http.StatusBadRequest, errmsg.INVALID_PARAMS, nil)
 		return
 	}

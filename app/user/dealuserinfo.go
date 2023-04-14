@@ -29,7 +29,7 @@ func Blacklist(param string) (error, interface{}) {
 	if !(state == 0 || state == 1 || state == 3) {
 		return fmt.Errorf("state[%v] not wright!", state), nil
 	}
-	logger.Info("email:", email, "state:", state)
+	logger.Debug("email:", email, "state:", state)
 	var user models.UserBase
 	ok, err := dbutil.SqlEngine.Where("email = ?", email).Get(&user)
 	if !ok || err != nil {
