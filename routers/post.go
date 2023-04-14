@@ -17,18 +17,28 @@ func apiPost(c *gin.Context) {
 	if Id := c.Query("id"); Id != "" {
 		id = com.StrTo(Id).MustInt()
 	} else {
-		logger.Error("request method id[%v] empty!", Id)
+		logger.Errorf("request id[%v] empty!", Id)
+		resG.Response(http.StatusBadRequest, errmsg.INVALID_PARAMS, nil)
+		return
+	}
+	var method string
+	if method = c.Query("method"); method == "" {
+		logger.Errorf("request method[%v] empty!", method)
+		resG.Response(http.StatusBadRequest, errmsg.INVALID_PARAMS, nil)
+		return
+	}
+
+	if idToFunc[id] != method {
+		logger.Errorf("request method[%v] not registed!", method)
 		resG.Response(http.StatusBadRequest, errmsg.INVALID_PARAMS, nil)
 		return
 	}
 
 	var param string
-	if Param := c.Query("param"); Param == "" {
-		logger.Error("request param [%v] empty!", Param)
+	if param = c.Query("param"); param == "" {
+		logger.Errorf("request param [%v] empty!", param)
 		resG.Response(http.StatusBadRequest, errmsg.INVALID_PARAMS, nil)
 		return
-	} else {
-		param = Param
 	}
 
 	if handler, ok := handlers[id]; ok {
@@ -39,7 +49,7 @@ func apiPost(c *gin.Context) {
 			return
 		}
 	} else {
-		logger.Error("request method id[%v] not exist!", id)
+		logger.Errorf("request method id[%v] not exist!", id)
 		resG.Response(http.StatusBadRequest, errmsg.INVALID_PARAMS, nil)
 		return
 	}

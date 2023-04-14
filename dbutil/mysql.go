@@ -12,12 +12,14 @@ var SqlEngine *xorm.Engine
 
 func init() {
 	log.Println("mysql conf:", config.MysqlConf)
-	e, err := xorm.NewEngine("mysql", config.MysqlConf.User+":"+config.MysqlConf.PassWord+"@tcp("+config.MysqlConf.Host+")/"+config.MysqlConf.DbName+"?charset=utf8")
+	var err error
+	SqlEngine, err = xorm.NewEngine("mysql", config.MysqlConf.User+":"+config.MysqlConf.PassWord+"@tcp("+config.MysqlConf.Host+")/"+config.MysqlConf.DbName+"?charset=utf8")
 	if err != nil {
 		log.Fatal("错误=", err)
 	}
-	SqlEngine = e
+	log.Println("connect db ok!")
+
 	//在控制台打印出生成的SQL语句
 	//SqlEngine.ShowSQL(true)
-	log.Println("connect db ok!")
+
 }

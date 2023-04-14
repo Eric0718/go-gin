@@ -11,7 +11,7 @@ func init() {
 	handlers = make(map[int]Handler)
 	idToFunc = make(map[int]string)
 	//前端接口注册
-	registerFuncs()
+	registerRouters()
 }
 
 //id start from 1 ,type int
