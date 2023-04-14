@@ -4,19 +4,21 @@ import (
 	"go-gin/logger"
 	"go-gin/util/resmsg"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/unknwon/com"
 )
 
 func apiPost(c *gin.Context) {
 	logger.PrintHttpRequest(c)
 	resG := Gin{C: c}
 	id := -1
-	if Id := c.Query("id"); Id != "" {
-		id = com.StrTo(Id).MustInt()
+
+	if sid := c.Query("id"); sid != "" {
+		pid, _ := strconv.ParseInt(sid, 10, 0)
+		id = int(pid)
 	} else {
-		logger.Errorf("request id[%v] empty!\n", Id)
+		logger.Errorf("request id[%v] empty!\n", sid)
 		resG.Response(http.StatusBadRequest, resmsg.INVALID_PARAMS, nil)
 		return
 	}
