@@ -15,3 +15,16 @@ type HttpConfig struct {
 }
 
 var HttpConf = &HttpConfig{}
+
+type LogConfig struct {
+	LogMode  int
+	FilePath string
+	CutSize  int64
+	CutByDay bool
+	DayAge   int
+
+	GinPath string
+	GinName string
+}
+
+var LogConf = &LogConfig{}

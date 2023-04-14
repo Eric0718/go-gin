@@ -1,7 +1,7 @@
-package ginresponse
+package res
 
 import (
-	"go-gin/app/errmsg"
+	"go-gin/routers/errmsg"
 
 	"github.com/gin-gonic/gin"
 )

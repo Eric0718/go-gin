@@ -14,13 +14,12 @@ import (
 
 func main() {
 	defer logger.Sync()
-	logger.Level = logger.DEBUG
-	logger.InitLogger("./log/debug/debug.log", 0 /*size*/, true /*day cut*/, 7 /*day age*/)
+	logger.InitLogger(config.LogConf)
 
 	gin.SetMode(config.HttpConf.RunMode)
 	r := gin.Default()
-	r.Use(ginlog.GinLogger("./log/ginlog/", "gin.log"))
+	r.Use(ginlog.GinLogger(config.LogConf.GinPath, config.LogConf.GinName))
 	routers.InitRouters(r)
 	logger.Info("start server: localhost", config.HttpConf.HttpPort)
-	r.Run(config.HttpConf.HttpPort) // 监听,并启动服务
+	r.Run(config.HttpConf.HttpPort)
 }

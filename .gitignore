@@ -1,3 +1,4 @@
 *-gin
 *.ini
 *.sh
+*.api

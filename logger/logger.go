@@ -3,6 +3,8 @@ package logger
 import (
 	"context"
 	"fmt"
+	"go-gin/config"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -37,7 +39,12 @@ func init() {
 }
 
 // size: kb
-func InitLogger(path string, size int64, everyday bool, ct ...int) {
+func InitLogger(logCfg *config.LogConfig) { //path string, size int64, everyday bool, ct ...int) {
+	if logCfg == nil {
+		log.Fatal("nil logCfg!")
+	}
+	Level = level(logCfg.LogMode)
+	path := logCfg.FilePath
 	if path == "" {
 		logPath = "."
 		return
@@ -50,17 +57,16 @@ func InitLogger(path string, size int64, everyday bool, ct ...int) {
 	if err != nil {
 		panic(err)
 	}
-	fileSize = size
-	everyDay = everyday
-	if len(ct) > 0 {
-		cleanTime = ct[0]
+	fileSize = logCfg.CutSize
+	everyDay = logCfg.CutByDay
+	if logCfg.DayAge > 0 {
+		cleanTime = logCfg.DayAge
 	}
 	var ctx context.Context
 	if logPath != "." && cleanTime > 0 {
 		ctx, cancel = context.WithCancel(context.Background())
 		go clean(ctx, dir, name)
 	}
-
 }
 
 func Close() {

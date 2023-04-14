@@ -10,7 +10,7 @@ var cfg *ini.File
 
 func init() {
 	var err error
-	cfg, err = ini.Load("config/config.ini")
+	cfg, err = ini.Load("./config/config.ini")
 	if err != nil {
 		log.Fatalf("init Config, fail to parse 'config/config.ini': %v", err)
 		return
@@ -18,7 +18,8 @@ func init() {
 
 	mapTo("mysql", MysqlConf)
 	mapTo("server", HttpConf)
-	log.Println("InitConfig:", MysqlConf, HttpConf)
+	mapTo("log", LogConf)
+	//fmt.Println("MysqlConf:", MysqlConf, "HttpConf:", HttpConf, "LogConf:", LogConf)
 }
 
 func mapTo(section string, v interface{}) {

@@ -34,7 +34,7 @@ func GinLogger(fpath, fname string) gin.HandlerFunc {
 		// 分割后的文件名称
 		fileName+".%Y%m%d.log",
 		// 生成软链，指向最新的日志文件
-		rotatelogs.WithLinkName(fileName),
+		//rotatelogs.WithLinkName(fileName),
 		// 设置最长保存时间
 		rotatelogs.WithMaxAge(7*24*time.Hour),
 		// 设置日志切割间隔时间

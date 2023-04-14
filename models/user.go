@@ -19,3 +19,9 @@ type UserBase struct {
 	DelFlag     int
 	IsScore     int
 }
+
+type UserRequest struct {
+	Email string `json:"email"`
+	Addr  string `json:"addr"`
+	Flag  int    `json:"flag"`
+}

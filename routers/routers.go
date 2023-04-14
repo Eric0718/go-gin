@@ -5,6 +5,8 @@ import (
 )
 
 func InitRouters(r *gin.Engine) {
-	initNftGroup(r)
-	initUserGroup(r)
+	//deal with all get request
+	r.POST("/api-get", apiGet)
+	//deal with all post request
+	r.POST("/api-post", apiPost)
 }
