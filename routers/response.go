@@ -1,7 +1,7 @@
-package res
+package routers
 
 import (
-	"go-gin/routers/errmsg"
+	"go-gin/util/resmsg"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,10 +26,10 @@ func (g *Gin) Response(httpCode, errCode int, data interface{}) {
 }
 
 func getMsg(code int) string {
-	msg, ok := errmsg.MsgFlags[code]
+	msg, ok := resmsg.MsgFlags[code]
 	if ok {
 		return msg
 	}
 
-	return errmsg.MsgFlags[errmsg.ERROR]
+	return resmsg.MsgFlags[resmsg.ERROR]
 }

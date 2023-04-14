@@ -2,7 +2,7 @@ package routers
 
 import "fmt"
 
-type Handler func(param string) (error, interface{})
+type Handler func(param string) (int, interface{})
 
 var handlers map[int]Handler
 var idToFunc map[int]string

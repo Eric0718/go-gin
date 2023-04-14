@@ -1,4 +1,4 @@
-package errmsg
+package resmsg
 
 const (
 	SUCCESS        = 200
