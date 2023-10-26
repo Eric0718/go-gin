@@ -12,20 +12,21 @@ import (
 )
 
 type msgLog struct {
-	logPath string
+	LogPath string
 	// Prev    string    // 深度对于的路径
 	Msg    string    // 日志信息
 	Level  level     // 日志级别
-	create time.Time // 创建日志的时间
+	Create time.Time // 创建日志的时间
 	Ctime  string
 	// deep     int               // 向外的深度，  Upfunc 才会用到
 	Color    []color.Attribute // 颜色
 	Line     string            // 行号
-	out      bool              // 文件还是控制台
-	path     string
-	name     string
-	size     int64 // 文件大小
-	format   string
+	Out      bool              // 文件还是控制台
+	Path     string
+	Name     string
+	Size     int64 // 文件大小
+	EveryDay bool
+	Format   string
 	Hostname string
 	Label    map[string]string
 }

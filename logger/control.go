@@ -17,7 +17,7 @@ var nowday string
 func (lm *msgLog) control() {
 	// format = printFileline() + format // printfileline()打印出错误的文件和行数
 	// 判断是输出控制台 还是写入文件
-	if lm.out {
+	if lm.Out {
 		// 如果是输出到控制台，直接执行就好了
 		lm.printLine()
 		return
@@ -25,29 +25,29 @@ func (lm *msgLog) control() {
 		// 写入文件
 		if everyDay {
 			// 如果每天备份的话， 文件名需要更新
-			thisDay := fmt.Sprintf("%d-%d-%d", lm.create.Year(), lm.create.Month(), lm.create.Day())
+			thisDay := fmt.Sprintf("%d-%d-%d", lm.Create.Year(), lm.Create.Month(), lm.Create.Day())
 			if nowday == "" {
 				nowday = thisDay
 			}
 			if thisDay != nowday {
 				// 重命名
-				if err := os.Rename(lm.logPath, filepath.Join(lm.path, nowday+"_"+lm.name)); err != nil {
+				if err := os.Rename(lm.LogPath, filepath.Join(lm.Path, nowday+"_"+lm.Name)); err != nil {
 					log.Println(err)
-					lm.out = true
+					lm.Out = true
 					return
 				}
 				nowday = thisDay
 			}
 
 		}
-		if lm.size > 0 {
-			f, err := os.Open(lm.logPath)
+		if lm.Size > 0 {
+			f, err := os.Open(lm.LogPath)
 			if err == nil {
 				// 如果大于设定值， 那么
 				fi, err := f.Stat()
-				if err == nil && fi.Size() >= lm.size*1024 {
+				if err == nil && fi.Size() >= lm.Size*1024 {
 					f.Close()
-					err = os.Rename(lm.logPath, filepath.Join(lm.path, fmt.Sprintf("%d_%s", lm.create.Unix(), lm.name)))
+					err = os.Rename(lm.LogPath, filepath.Join(lm.Path, fmt.Sprintf("%d_%s", lm.Create.Unix(), lm.Name)))
 					if err != nil {
 						log.Println(err)
 					}
@@ -66,11 +66,11 @@ func (lm *msgLog) control() {
 func (lm *msgLog) writeToFile() {
 	//
 	//不存在就新建
-	f, err := os.OpenFile(lm.logPath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	f, err := os.OpenFile(lm.LogPath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		// 如果失败，切换到控制台输出
 		color.Red("Permission denied,  auto change to Stdout")
-		lm.out = true
+		lm.Out = true
 		lm.printLine()
 		return
 	}
@@ -95,7 +95,7 @@ func (lm *msgLog) printLine() {
 }
 
 func (lm *msgLog) formatText() (*bytes.Buffer, error) {
-	tml, err := template.New(lm.name).Parse(lm.format)
+	tml, err := template.New(lm.Name).Parse(lm.Format)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err

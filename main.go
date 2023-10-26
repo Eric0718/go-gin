@@ -16,6 +16,8 @@ func main() {
 
 	gin.SetMode(config.HttpConf.RunMode)
 	r := gin.Default()
+	r.Use(gin.Recovery())
+	//r.Use(middle.Prepare())
 	//r.Use(ginlog.GinLogger(config.LogConf.GinPath, config.LogConf.GinName))
 	routers.InitRouters(r)
 

@@ -10,8 +10,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -24,7 +22,7 @@ var (
 
 // 文件名
 var name string
-var Format string = "{{ .Ctime }} - [{{ .Level }}]{{ if .Label }} - {{ range $k,$v := .Label}}[{{$k}}:{{$v}}]{{end}}{{end}} - {{.Line}}: {{.Msg}}"
+var format string = "[{{ .Ctime }}] [{{ .Level }}]{{ if .Label }} {{ range $k,$v := .Label}}[{{$k}}:{{$v}}]{{end}}{{end}} [{{.Line}}] {{.Msg}}"
 var label map[string]string
 var labelLock sync.RWMutex
 
@@ -39,7 +37,7 @@ func initLabel() {
 }
 
 // size: kb
-func InitLogger(logCfg *config.LogConfig) { //path string, size int64, everyday bool, ct ...int) {
+func InitLogger(logCfg *config.LogConfig) {
 	initLabel()
 	if logCfg == nil {
 		log.Fatal("nil logCfg!")
@@ -106,21 +104,21 @@ func GetLabel() map[string]string {
 // open file，  所有日志默认前面加了时间，
 func Tracef(format string, args ...interface{}) {
 	if Level <= TRACE {
-		s(TRACE, fmt.Sprintf(format, args...))
+		s(TRACE, fmt.Sprintf(format, args...)+"\n")
 	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func Debugf(format string, args ...interface{}) {
 	if Level <= DEBUG {
-		s(DEBUG, fmt.Sprintf(format, args...))
+		s(DEBUG, fmt.Sprintf(format, args...)+"\n")
 	}
 }
 
 // open file，  所有日志默认前面加了时间，
 func Infof(format string, args ...interface{}) {
 	if Level <= INFO {
-		s(INFO, fmt.Sprintf(format, args...))
+		s(INFO, fmt.Sprintf(format, args...)+"\n")
 	}
 }
 
@@ -128,7 +126,7 @@ func Infof(format string, args ...interface{}) {
 func Warnf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= WARN {
-		s(WARN, fmt.Sprintf(format, args...))
+		s(WARN, fmt.Sprintf(format, args...)+"\n")
 	}
 }
 
@@ -136,14 +134,14 @@ func Warnf(format string, args ...interface{}) {
 func Errorf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= ERROR {
-		s(ERROR, fmt.Sprintf(format, args...))
+		s(ERROR, fmt.Sprintf(format, args...)+"\n")
 	}
 }
 
 func Fatalf(format string, args ...interface{}) {
 	// error日志，添加了错误函数，
 	if Level <= FATAL {
-		s(FATAL, fmt.Sprintf(format, args...))
+		s(FATAL, fmt.Sprintf(format, args...)+"\n")
 	}
 }
 
@@ -226,39 +224,19 @@ func s(level level, msg string, deep ...int) {
 	cache <- msgLog{
 		Msg:      msg,
 		Level:    level,
-		name:     name,
-		create:   now,
+		Name:     name,
+		Create:   now,
 		Ctime:    now.Format("2006-01-02 15:04:05"),
 		Color:    GetColor(level),
 		Line:     printFileline(0),
-		out:      logPath == "." || logPath == "",
-		path:     dir,
-		logPath:  logPath,
-		size:     fileSize,
+		Out:      logPath == "." || logPath == "",
+		Path:     dir,
+		LogPath:  logPath,
+		Size:     fileSize,
+		EveryDay: everyDay,
 		Hostname: hostname,
-		format:   Format,
+		Format:   format,
 		Label:    GetLabel(),
 	}
 
-}
-
-func PrintHttpRequest(c *gin.Context) {
-	startTime := time.Now()
-	// 处理请求
-	c.Next()
-	endTime := time.Now()
-	// 执行时间
-	latencyTime := endTime.Sub(startTime)
-	// 请求方式
-	reqMethod := c.Request.Method
-	// 请求路由
-	reqUrl := c.Request.URL
-	// 状态码
-	statuCode := c.Writer.Status()
-	// 请求IP
-	clientIP := c.ClientIP()
-	// 日志格式
-	if Level <= INFO {
-		s(INFO, arrToString(statuCode, latencyTime, clientIP, reqMethod, reqUrl)+"\n")
-	}
 }

@@ -225,24 +225,25 @@ func (l *Log) s(level level, msg string, deep ...int) {
 	// 	pre += fmt.Sprintf("[%s = %s]", k, v)
 	// }
 	if l.Format == "" {
-		l.Format = Format
+		l.Format = format
 	}
 	now := time.Now()
 	cache <- msgLog{
 		// Prev:    pre,
 		Msg:      msg,
 		Level:    level,
-		create:   now,
+		Create:   now,
 		Ctime:    now.Format("2006-01-02 15:04:05"),
 		Color:    GetColor(level),
 		Line:     printFileline(0),
-		out:      l.Name == "." || l.Name == "",
-		path:     l.Dir,
-		logPath:  l.Path,
+		Out:      l.Name == "." || l.Name == "",
+		Path:     l.Dir,
+		LogPath:  l.Path,
 		Hostname: hostname,
-		name:     l.Name,
-		size:     l.Size,
-		format:   l.Format,
+		Name:     l.Name,
+		Size:     l.Size,
+		EveryDay: l.EveryDay,
+		Format:   l.Format,
 		Label:    l.GetLabel(),
 	}
 }
