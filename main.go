@@ -17,10 +17,8 @@ func main() {
 	gin.SetMode(config.HttpConf.RunMode)
 	r := gin.Default()
 	r.Use(gin.Recovery())
-	//r.Use(middle.Prepare())
-	//r.Use(ginlog.GinLogger(config.LogConf.GinPath, config.LogConf.GinName))
 	routers.InitRouters(r)
 
-	logger.Info("start server: localhost", config.HttpConf.HttpPort)
+	logger.Info("start server:", config.HttpConf.HttpPort)
 	r.Run(config.HttpConf.HttpPort)
 }
