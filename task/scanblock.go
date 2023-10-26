@@ -1,18 +1,20 @@
 package task
 
 import (
+	"go-gin/config"
 	"go-gin/logger"
-	"go-gin/util"
 	"time"
 )
 
 func init() {
-	go testlog()
+	go func() {
+		for {
+			time.Sleep(time.Second)
+			logger.Infof("runmode=%v", config.HttpConf.RunMode)
+		}
+	}()
+	//go task()
 }
 
-func testlog() {
-	for {
-		logger.Info("test log time:", time.Now().Format(util.TimeLayout))
-		time.Sleep(time.Second)
-	}
+func task() {
 }
