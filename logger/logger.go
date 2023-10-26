@@ -24,7 +24,7 @@ var (
 
 // 文件名
 var name string
-var Format string = "{{ .Ctime }} - [{{ .Level }}]{{ if .Label }} - {{ range $k,$v := .Label}}[{{$k}}:{{$v}}]{{end}}{{end}} - {{.Hostname}} - {{.Line}} - {{.Msg}}"
+var Format string = "{{ .Ctime }} - [{{ .Level }}]{{ if .Label }} - {{ range $k,$v := .Label}}[{{$k}}:{{$v}}]{{end}}{{end}} - {{.Line}}: {{.Msg}}"
 var label map[string]string
 var labelLock sync.RWMutex
 
@@ -32,7 +32,7 @@ var labelLock sync.RWMutex
 var hostname = ""
 var cancel context.CancelFunc
 
-func init() {
+func initLabel() {
 	hostname, _ = os.Hostname()
 	label = make(map[string]string)
 	labelLock = sync.RWMutex{}
@@ -40,6 +40,7 @@ func init() {
 
 // size: kb
 func InitLogger(logCfg *config.LogConfig) { //path string, size int64, everyday bool, ct ...int) {
+	initLabel()
 	if logCfg == nil {
 		log.Fatal("nil logCfg!")
 	}

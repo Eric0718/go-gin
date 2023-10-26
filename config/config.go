@@ -8,7 +8,7 @@ import (
 
 var cfg *ini.File
 
-func init() {
+func InitConfig() {
 	var err error
 	cfg, err = ini.Load("./config/config.ini")
 	if err != nil {

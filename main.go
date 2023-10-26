@@ -1,25 +1,24 @@
 package main
 
 import (
-	_ "go-gin/app/task"
 	"go-gin/config"
-	_ "go-gin/config"
-	_ "go-gin/dbutil"
 	"go-gin/logger"
-	"go-gin/middleware/ginlog"
 	"go-gin/routers"
+	_ "go-gin/task"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	defer logger.Sync()
+	config.InitConfig()
 	logger.InitLogger(config.LogConf)
+	defer logger.Sync()
 
 	gin.SetMode(config.HttpConf.RunMode)
 	r := gin.Default()
-	r.Use(ginlog.GinLogger(config.LogConf.GinPath, config.LogConf.GinName))
+	//r.Use(ginlog.GinLogger(config.LogConf.GinPath, config.LogConf.GinName))
 	routers.InitRouters(r)
+
 	logger.Info("start server: localhost", config.HttpConf.HttpPort)
 	r.Run(config.HttpConf.HttpPort)
 }
